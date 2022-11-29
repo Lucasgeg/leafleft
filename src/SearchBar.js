@@ -47,7 +47,6 @@ const SearchBar = ({ setPlaceFocus }) => {
                   lat: result.geometry.coordinates[1],
                   lng: result.geometry.coordinates[0],
                 });
-                setPlaceFocus([resultSelect.lat, resultSelect.lng]);
               }}
             >
               {result.properties.label}
