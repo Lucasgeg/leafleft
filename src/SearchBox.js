@@ -1,17 +1,21 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useMap } from "react-leaflet";
 
-const SearchBox = () => {
+const SearchBox = ({ center }) => {
   const [searchInput, setSearchInput] = useState("");
   const [searchBool, setSearchBool] = useState(undefined);
   const [results, setResults] = useState([]);
-  const [selectSearch, setSelectSearch] = useState([]);
-
+  const map = useMap();
+  const [selectSearch, setSelectSearch] = useState(center);
+  console.log(selectSearch);
+  useEffect(() => {
+    map.flyTo(selectSearch);
+  }, [selectSearch, map]);
   const request = async () => {
+    const formatedSearch = searchInput.split(" ").join("+");
     await axios
-      .get(
-        `https://us1.locationiq.com/v1/search?key=pk.4d4f505c8d2d0b4bf36010720ec4737d&q=${searchInput}&format=json`
-      )
+      .get(`https://geocode.maps.co/search?q=${formatedSearch}`)
       .then((results) => {
         console.log(results.data);
         setResults(results.data);
@@ -35,14 +39,14 @@ const SearchBox = () => {
       <>
         {searchBool && (
           <select
-            defaultChecked={true}
             onChange={(e) => {
               setSelectSearch(e.target.value.split(","));
             }}
           >
+            <option>Voir les choix</option>
             {results.map((result) => {
               return (
-                <option key={result.osm_id} value={[result.lat, result.lon]}>
+                <option key={result.place_id} value={[result.lat, result.lon]}>
                   {result.display_name}
                 </option>
               );

@@ -2,23 +2,19 @@ import "./App.css";
 import { TileLayer, MapContainer } from "react-leaflet";
 import { Marker, Popup } from "react-leaflet";
 import dataset from "./data/restaurants-references.json";
-import { useState } from "react";
 import SearchBox from "./SearchBox";
 
 function App() {
-  const [placeFocus, setPlaceFocus] = useState([48.485588, -4.252345]);
-
+  const center = [48.485588, -4.252345];
   return (
     <>
-      <div className=""></div>
-      <MapContainer center={placeFocus} zoom={17}>
+      <MapContainer center={center} zoom={17}>
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           // url={`https://tile.jawg.io/jawg-streets/{z}/{x}/{y}.png?lang=fr&access-token=${token}`}
           attribution='&copy; <a href="http://www.osm.org/copyright">OpenStreetMap</a>'
         />
-
-        <SearchBox />
+        <SearchBox center={center} />
 
         {dataset.map((restaurant) => {
           return (
